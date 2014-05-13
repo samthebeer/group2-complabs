@@ -1,0 +1,58 @@
+from visual import *
+import numpy as np
+import re
+print 'Visualize Initial or Final?'
+print 'Press 1 and Enter for Initial'
+print 'Press 2 and Enter for Final'
+Stage=0
+Stage=input()
+data=open('test.out')
+condition_initial = False
+condition_final= False
+
+for line in data:
+    if Stage==1:
+        if 'Mixed fractional/Cartesian coordinates of surface' in line:
+            condition_initial = True
+        if condition_initial == True:
+            if 'Mg ' in line:
+                posi=re.findall("\d+.\d+", line)
+                posi=[float(i) for i in posi]
+                posi=np.array(posi[:3])
+                sphere(pos=posi, radius=0.25)
+            if 'O ' in  line:
+                posi=re.findall("\d+.\d+", line)
+                posi=[float(i) for i in posi]
+                posi=np.array(posi[:3])
+                sphere(pos=posi, radius=0.25, color=color.blue)
+            if 'Ca ' in line:
+                posi=re.findall("\d+.\d+", line)
+                posi=[float(i) for i in posi]
+                posi=np.array(posi[:3])
+                sphere(pos=posi, radius=0.25, color=color.yellow)
+        if 'Constraints' in line:
+            condition_initial = False
+
+    #----------------FINAL POSITIONS--------------#
+    if Stage==2:
+        if 'Final fractional/Cartesian coordinates of atoms' in line:
+            condition_final = True
+        if condition_final == True:
+            if 'Mg ' in line:
+                posi=re.findall("\d+.\d+", line)
+                posi=[float(i) for i in posi]
+                posi=np.array(posi[:3])
+                sphere(pos=posi, radius=0.25)
+            if 'O ' in  line:
+                posi=re.findall("\d+.\d+", line)
+                posi=[float(i) for i in posi]
+                posi=np.array(posi[:3])
+                sphere(pos=posi, radius=0.25, color=color.blue)
+            if 'Ca ' in line:
+                print posi
+                posi=re.findall("\d+.\d+", line)
+                posi=[float(i) for i in posi]
+                posi=np.array(posi[:3])
+                sphere(pos=posi, radius=0.25, color=color.yellow)
+        if 'Final internal/Cartesian derivatives' in line:
+            condition_final=False
